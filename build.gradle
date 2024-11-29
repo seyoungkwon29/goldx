@@ -34,18 +34,19 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web-services'  // 웹 서비스 (SOAP 등)
 
     // PostgreSQL
-    runtimeOnly 'org.postgresql:postgresql:42.7.4'
+    runtimeOnly 'org.postgresql:postgresql:42.7.3'
 
     // Redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis:3.3.1' // Redis 지원
     implementation 'org.springframework.boot:spring-boot-starter-cache:3.3.5' // 캐싱 지원
-    implementation 'io.lettuce.core:lettuce-core:7.3.0' // Lettuce (Redis 클라이언트)
+    implementation 'io.lettuce:lettuce-core:6.3.2.RELEASE' // Lettuce (Redis 클라이언트)
 
     // gRPC
-    implementation 'io.grpc:grpc-spring-boot-starter:2.11.1'
-    implementation 'io.grpc:grpc-netty-shaded:1.49.0'  // gRPC Netty 서버
-    implementation 'io.grpc:grpc-stub:1.49.0'  // gRPC 클라이언트
-    runtimeOnly 'com.google.protobuf:protobuf-gradle-plugin:0.9.4' // Protocol Buffer 메시지와 gRPC 통합 지원
+    implementation 'io.github.lognet:grpc-spring-boot-starter:5.1.5'
+    implementation 'io.grpc:grpc-netty-shaded:1.68.0'  // gRPC Netty 서버
+    implementation 'io.grpc:grpc-stub:1.68.0'  // gRPC 클라이언트
+    implementation 'io.grpc:grpc-protobuf:1.68.0' // Protocol Buffer 메시지와 gRPC 통합 지원
+    implementation 'io.grpc:grpc-api:1.68.0'
     // javax.annotation.xx 에러 발생 시 추가
     // compileOnly 'org.apache.tomcat:annotations-api:6.0.53'
 
