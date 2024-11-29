@@ -22,11 +22,10 @@ public class PostgreSQLConnectionTest {
     private String PASSWORD;
 
     @Test
-    @DisplayName("PostgreSQL 연결 테스트")
+    @DisplayName("데이터베이스 연결 테스트")
     public void ConnectionTest() throws Exception {
         Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD); // DB 연결
         Assertions.assertNotNull(connection);
     }
-
 
 }
