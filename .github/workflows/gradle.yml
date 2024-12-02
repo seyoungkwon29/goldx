@@ -1,0 +1,47 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches: [ "ci/cd" ]
+  pull_request:
+    branches: [ "ci/cd" ]
+
+jobs:
+  build:
+    name: Deploy Application
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      # 1. Repository Checkout
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      # 2. Set up SSH for EC2
+      - name: Set up SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          SSH_KNWON_HOSTS: ${[ secrets.EC2_KWNOWN_HOSTS }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          echo "$SSH_KNWON_HOSTS" > ~/.ssh/knwon_hosts
+      # 3. Deploy to EC2
+      - name: Deploy to EC2
+        env:
+          EC2_USER: ${{ secrets.EC2_USER }}
+          EC2_HOST: ${{ scretes.EC2_HOST }}
+        run: |
+          ssh $EC2_USER@EC2_HOST << 'EOF'
+            set -e
+            # Stop existing containers
+            docker stop nginx-container || true
+            docker rm nginx-container || true
+
+            # Pull the latest Docker Image
+            docker pull seyoungkwon29/nginx:latest
+            EOF
+            
+            # Run the Docker container
+            docker run --name nginx-container -p 80:80 -d seyoungkwon29/nginx:latest
