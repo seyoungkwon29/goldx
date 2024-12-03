@@ -1,4 +1,4 @@
-name: Deploy to EC2
+name: Deploy to EC2 with Docker
 
 on:
   push:
@@ -7,28 +7,36 @@ on:
     branches: [ "ci/cd" ]
 
 jobs:
-  build:
-    name: Deploy Application
+  deploy:
+    name: Deploy Application with Docker
     runs-on: ubuntu-latest
-    
-    permissions:
-      contents: read
 
     steps:
       # 1. Repository Checkout
       - name: Checkout Code
         uses: actions/checkout@v4
-      # 2. Set up SSH for EC2
-      - name: Set up SSH
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-          SSH_KNWON_HOSTS: ${[ secrets.EC2_KWNOWN_HOSTS }}
+
+      # 2. Login to Docker 
+      - name: Login to Docker Hub
+        uses: docke /login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      
+      # 3. Build and Push Docker Image
+      - name: Build and Push Docker Image
         run: |
-          mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          echo "$SSH_KNWON_HOSTS" > ~/.ssh/knwon_hosts
-      # 3. Deploy to EC2
+          # Docker 이미지 이름과 태그 설정
+          IMAGE_NAME=seyoungkwon29/goldx
+          TAG=latest
+
+          # Docker 이미지 빌드
+          docker build -t $IMAGE_NAME:$TAG .
+
+          # Docker Hub에 이미지 푸시
+          docker push $IMAGE_NAME:$TAG
+          
+      # 4. Deploy to EC2
       - name: Deploy to EC2
         env:
           EC2_USER: ${{ secrets.EC2_USER }}
@@ -36,6 +44,7 @@ jobs:
         run: |
           ssh $EC2_USER@EC2_HOST << 'EOF'
             set -e
+            
             # Stop existing containers
             docker stop nginx-container || true
             docker rm nginx-container || true
