@@ -18,7 +18,7 @@ jobs:
 
       # 2. Login to Docker 
       - name: Login to Docker Hub
-        uses: docke /login-action@v2
+        uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
