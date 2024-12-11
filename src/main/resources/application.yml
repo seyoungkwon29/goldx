@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/goldxdb
-    username: goldx
-    password: goldx1234
+    username: "goldx"
+    password: "goldx1234"
   jpa:
     hibernate:
       ddl-auto: create
