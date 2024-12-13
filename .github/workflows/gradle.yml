@@ -43,6 +43,10 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+        
+      - name: Start SSH Agent
+        run: eval "$(ssh-agent -s)"
+        shell: bash
 
       - name: Add SSH Key
         run: |
