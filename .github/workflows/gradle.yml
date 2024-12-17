@@ -55,6 +55,16 @@ jobs:
           ssh-add id_rsa
         shell: bash
 
+      - name: Debug SSH Key Addition
+        run: |
+          eval "$(ssh-agent -s)"
+          echo "${{ secrets.EC2_SSH_KEY }}" > id_rsa
+          chmod 600 id_rsa
+          ssh-add id_rsa || (echo "Failed to add SSH key" && cat id_rsa && exit 1)
+          ssh-add -l
+        shell: bash
+
+
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v0.1.6
         with:
