@@ -35,3 +35,13 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# 환경 변수 파일
+.env
+
+# Gradle Wrapper 실행 파일
+gradlew
+gradlew.bat
+
+# Gradle Wrapper 설정 파일
+gradle/wrapper/
